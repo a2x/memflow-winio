@@ -1,0 +1,30 @@
+[package]
+name = "memflow-winio"
+version = "0.1.0"
+authors = ["a2x"]
+edition = "2021"
+readme = "README.md"
+repository = "https://github.com/a2x/memflow-winio"
+license = "MIT"
+
+[lib]
+crate-type = ["lib", "cdylib"]
+
+[dependencies]
+memflow = { version = "0.2", features = ["plugins"] }
+memflow-vdm = { git = "https://github.com/a2x/memflow-vdm" }
+thiserror = "1.0"
+
+[dependencies.windows]
+version = "0.56"
+features = [
+    "Win32_Foundation",
+    "Win32_Security",
+    "Win32_Storage",
+    "Win32_Storage_FileSystem",
+    "Win32_System",
+    "Win32_System_IO",
+]
+
+[profile.release]
+lto = true
