@@ -88,7 +88,7 @@ impl PhysicalMemoryResponse for MapPhysicalMemoryResponse {
 }
 
 impl PhysicalMemory for WinIoDriver {
-    fn map_phys_mem(&self, addr: u64, size: usize) -> Result<Box<dyn PhysicalMemoryResponse>> {
+    fn map_phys_mem(&self, addr: u64, size: usize) -> Result<PhysicalMemoryResponseBoxed> {
         let mut req = PhysicalMemoryMappingRequest {
             size: size as _,
             phys_addr: addr,
@@ -117,7 +117,7 @@ impl PhysicalMemory for WinIoDriver {
         }))
     }
 
-    fn unmap_phys_mem(&self, mapping: Box<dyn PhysicalMemoryResponse>) -> Result<()> {
+    fn unmap_phys_mem(&self, mapping: PhysicalMemoryResponseBoxed) -> Result<()> {
         let res = mapping
             .as_any()
             .downcast_ref::<MapPhysicalMemoryResponse>()
