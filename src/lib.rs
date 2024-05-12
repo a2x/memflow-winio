@@ -148,13 +148,35 @@ impl PhysicalMemory for WinIoDriver {
 
 #[connector(name = "winio")]
 pub fn create_connector<'a>(_args: &ConnectorArgs) -> memflow::error::Result<VdmConnector<'a>> {
-    let driver = WinIoDriver::open().map_err(|_| {
+    let drv = WinIoDriver::open().map_err(|_| {
         Error(ErrorOrigin::Connector, ErrorKind::Uninitialized)
             .log_error("Unable to open a handle to the WinIo driver")
     })?;
 
-    init_connector(Box::new(driver)).map_err(|_| {
+    init_connector(Box::new(drv)).map_err(|_| {
         Error(ErrorOrigin::Connector, ErrorKind::Uninitialized)
             .log_error("Unable to initialize the VDM connector")
     })
+}
+
+#[test]
+fn map_phys_mem() -> Result<()> {
+    const PAGE_SIZE: usize = 4096;
+
+    let drv = WinIoDriver::open()?;
+
+    for addr in (0x0..0x10000u64).step_by(PAGE_SIZE) {
+        let mapping = drv.map_phys_mem(addr, PAGE_SIZE)?;
+
+        println!(
+            "mapped physical memory from {:#X} -> {:#X} (size: {})",
+            mapping.phys_addr(),
+            mapping.virt_addr(),
+            mapping.size(),
+        );
+
+        drv.unmap_phys_mem(mapping)?;
+    }
+
+    Ok(())
 }
