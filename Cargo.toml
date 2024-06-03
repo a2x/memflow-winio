@@ -19,12 +19,7 @@ thiserror = "1.0"
 version = "0.56"
 features = [
     "Win32_Foundation",
-    "Win32_Security",
     "Win32_Storage",
     "Win32_Storage_FileSystem",
-    "Win32_System",
     "Win32_System_IO",
 ]
-
-[profile.release]
-lto = true
