@@ -159,7 +159,7 @@ impl PhysicalMemory for WinIoDriver {
     }
 }
 
-#[connector(name = "winio")]
+#[connector(name = "winio", description = "test")]
 pub fn create_connector<'a>(_args: &ConnectorArgs) -> memflow::error::Result<VdmConnector<'a>> {
     let drv = WinIoDriver::open().map_err(|_| {
         Error(ErrorOrigin::Connector, ErrorKind::Uninitialized)
