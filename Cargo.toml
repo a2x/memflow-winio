@@ -2,7 +2,7 @@
 name = "memflow-winio"
 version = "0.1.0"
 authors = ["a2x"]
-edition = "2021"
+edition = "2024"
 readme = "README.md"
 repository = "https://github.com/a2x/memflow-winio"
 license = "MIT"
@@ -13,10 +13,9 @@ crate-type = ["lib", "cdylib"]
 [dependencies]
 memflow = { version = "0.2", features = ["plugins"] }
 memflow-vdm = { git = "https://github.com/a2x/memflow-vdm" }
-thiserror = "1.0"
 
 [dependencies.windows]
-version = "0.58"
+version = "0.61"
 features = [
     "Win32_Foundation",
     "Win32_Security",
