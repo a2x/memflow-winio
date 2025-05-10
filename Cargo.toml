@@ -10,6 +10,10 @@ license = "MIT"
 [lib]
 crate-type = ["lib", "cdylib"]
 
+[features]
+default = ["auto-start"]
+auto-start = []
+
 [dependencies]
 memflow = { version = "0.2", features = ["plugins"] }
 memflow-vdm = { git = "https://github.com/a2x/memflow-vdm" }

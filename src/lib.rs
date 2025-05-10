@@ -52,7 +52,16 @@ unsafe impl Send for PhysicalMemoryIoRequest {}
 unsafe impl Sync for PhysicalMemoryIoRequest {}
 
 #[derive(VdmDriver)]
-#[connector(conn_name = "winio")]
+#[cfg_attr(
+    feature = "auto-start",
+    connector(
+        conn_name = "winio",
+        use_env_vars = true,
+        service_name = "winio",
+        driver_path = r"C:\winio64.sys"
+    )
+)]
+#[cfg_attr(not(feature = "auto-start"), connector(conn_name = "winio"))]
 pub struct WinIoDriver {
     handle: HANDLE,
 }

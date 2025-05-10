@@ -3,6 +3,24 @@
 A memflow connector that exploits the vulnerable EneTechIo (WinIo) driver in Thermaltake's TOUGHRAM software (version
 1.0.3), which can be found [here](https://github.com/a2x/memflow-winio/releases/download/0.1.0/winio64.sys).
 
+## Service Management
+
+By default, this crate enables the `auto-start` feature that manages the WinIo driver service lifecycle automatically.
+
+When the connector is being initialized, it first checks that a service with the name specified in the
+`WINIO_SERVICE_NAME` environment variable exists, and if it does, it will start it if it's not already running (if this
+environment variable is not set, the service name defaults to `winio`). If a service with that name doesn't exist, the
+connector will automatically create a new service with that name using the driver path from the `WINIO_DRIVER_PATH`
+environment variable (if this environment variable is not set, the driver path defaults to `C:\winio64.sys`). For the
+service to be created successfully, the driver file must exist.
+
+This behavior can be disabled for cases where you prefer to create the service manually and ensure it's started before
+initializing the connector by excluding the default features in your Cargo.toml, like so:
+
+```toml
+memflow-winio = { git = "https://github.com/a2x/memflow-winio", default-features = false }
+```
+
 ## Building the Stand-alone Connector for Dynamic Loading
 
 To compile a dynamic library for use with the connector inventory, use the following command:
@@ -37,7 +55,7 @@ use memflow::prelude::v1::*;
 use memflow_win32::prelude::v1::*;
 
 fn main() -> Result<()> {
-    let connector = memflow_winio::create_connector(&Default::default())?;
+    let connector = memflow_winio::create_connector(&ConnectorArgs::default())?;
 
     let mut kernel = Win32Kernel::builder(connector)
         .build_default_caches()
