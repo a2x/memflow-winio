@@ -21,7 +21,7 @@ enum IoControlCode {
     UnmapPhysicalMemory = 0x80102044,
 }
 
-#[derive(Default)]
+
 #[repr(C)]
 pub struct PhysicalMemoryIoRequest {
     size: u64,
@@ -29,6 +29,18 @@ pub struct PhysicalMemoryIoRequest {
     sec_handle: *mut c_void,
     virt_addr: u64,
     obj_handle: *mut c_void,
+}
+
+impl Default for PhysicalMemoryIoRequest {
+    fn default() -> Self {
+        PhysicalMemoryIoRequest {
+            size: 0,
+            phys_addr: 0,
+            sec_handle: std::ptr::null_mut(),
+            virt_addr: 0,
+            obj_handle: std::ptr::null_mut(),
+        }
+    }
 }
 
 impl PhysicalMemoryMapping for PhysicalMemoryIoRequest {
